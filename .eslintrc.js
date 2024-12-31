@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 module.exports = {
-  extends: ['@spotify', '@spotify/eslint-config-oss'],
-  plugins: ['simple-import-sort', 'unused-imports'],
+  // extends: ['@spotify', '@spotify/eslint-config-oss'],
+  // plugins: ['simple-import-sort', 'unused-imports'],
+  extends: ['@spotify/eslint-config-oss', "plugin:@typescript-eslint/recommended"],
+  plugins: ['simple-import-sort', 'unused-imports', "@typescript-eslint"],
   rules: {
     'unused-imports/no-unused-imports': 'error',
     'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': 'error',
   },
+  parser: '@typescript-eslint/parser',
 };
