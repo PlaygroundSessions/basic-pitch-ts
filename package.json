@@ -1,5 +1,5 @@
 {
-  "name": "@spotify/basic-pitch",
+  "name": "@playground-sessions/basic-pitch",
   "version": "0.0.1",
   "description": "A JS module that takes audio and converts it to MIDI with machine learning",
   "main": "cjs/index.js",
