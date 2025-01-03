@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import * as tf from '@tensorflow/tfjs';
-
+import '@tensorflow/tfjs-backend-wasm'
 import { NoteEventTime } from './toMidi';
 
 export type OnCompleteCallback = (
@@ -52,8 +52,11 @@ export class BasicPitch {
    * Create Basic Pitch object.
    * @param modelOrModelPath A GraphModel of an already loaded tf.js graph
    * or a URL pointing to tf.js assets.
+   *
+   * In the original version of the BasicPitch class, the constructor was public.
+   * Playground made it private to ensure that the model is loaded after the backend is initialized.
    */
-  constructor(modelOrModelPath: string | Promise<tf.GraphModel>) {
+  private constructor(modelOrModelPath: string | Promise<tf.GraphModel>) {
     if (OVERLAP_LENGTH_FRAMES % 2 !== 0) {
       throw new Error(
         `OVERLAP_LENGTH_FRAMES is not divisible by 2! Is ${OVERLAP_LENGTH_FRAMES}`,
@@ -64,6 +67,27 @@ export class BasicPitch {
       typeof modelOrModelPath === 'string'
         ? tf.loadGraphModel(modelOrModelPath)
         : modelOrModelPath;
+  }
+
+  /**
+   * @param tensorflowBackend Use the default backend if undefined.
+   * @link https://www.tensorflow.org/js/guide/platform_environment#backends
+   * @link https://blog.tensorflow.org/2020/03/introducing-webassembly-backend-for-tensorflow-js.html
+   *
+   * There are talks of replacing the webgl default backend with webgpu in the future.
+   * However, Safari does not support webgpu, but it is in technical preview, so it may be coming.
+   * @link https://www.npmjs.com/package/@tensorflow/tfjs-backend-webgpu
+   */
+  public static async init(
+    modelOrModelPath: string | Promise<tf.GraphModel>,
+    tensorflowBackend: "webgl" | "wasm" | "cpu" | undefined = undefined,
+  ) {
+    if (tensorflowBackend) {
+      await tf.setBackend(tensorflowBackend);
+      await tf.ready();
+    }
+
+    return new BasicPitch(modelOrModelPath);
   }
 
   /**
