@@ -196,7 +196,7 @@ test.each([
   const contours: number[][] = [];
   let pct: number = 0;
 
-  const basicPitch = new BasicPitch(model);
+  const basicPitch = await BasicPitch.init(model);
   // testing with an AudioBuffer as input
   await basicPitch.evaluateModel(
     audioBuffer as unknown as AudioBuffer,
@@ -268,7 +268,7 @@ test('Can correctly evaluate vocal 80 bpm data', async () => {
   const contours: number[][] = [];
   let pct: number = 0;
 
-  const basicPitch = new BasicPitch(`file://${__dirname}/../model/model.json`);
+  const basicPitch = await BasicPitch.init(`file://${__dirname}/../model/model.json`);
 
   const wavData = Array.from(Array(wavBuffer.length).keys()).map(
     key => wavBuffer._data[key],
