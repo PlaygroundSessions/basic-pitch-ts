@@ -90,6 +90,10 @@ export class BasicPitch {
     return new BasicPitch(modelOrModelPath);
   }
 
+  public getTensorflowBackend() {
+    return tf.getBackend();
+  }
+
   /**
    * Adjust notes' start times by an offset.
    * @param notes Notes to adjust.
