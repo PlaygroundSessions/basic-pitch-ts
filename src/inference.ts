@@ -85,6 +85,7 @@ export class BasicPitch {
     if (tensorflowBackend) {
       await tf.setBackend(tensorflowBackend);
       await tf.ready();
+      console.log(`Tensorflow backend set to ${tf.getBackend()}`);
     }
 
     return new BasicPitch(modelOrModelPath);
