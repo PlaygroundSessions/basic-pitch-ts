@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import * as tf from '@tensorflow/tfjs';
-import '@tensorflow/tfjs-backend-wasm'
+import { setWasmPaths } from '@tensorflow/tfjs-backend-wasm';
 import { NoteEventTime } from './toMidi';
 
 export type OnCompleteCallback = (
@@ -74,6 +74,10 @@ export class BasicPitch {
    * @link https://www.tensorflow.org/js/guide/platform_environment#backends
    * @link https://blog.tensorflow.org/2020/03/introducing-webassembly-backend-for-tensorflow-js.html
    *
+   * @param wasmPath This is the absolute path that the browser uses to find the .wasm from the BasicPitch library.
+   * You may need to copy the .wasm files from the BasicPitch library to your project's public folder.
+   * If not sent, the default path is "/".
+   *
    * There are talks of replacing the webgl default backend with webgpu in the future.
    * However, Safari does not support webgpu, but it is in technical preview, so it may be coming.
    * @link https://www.npmjs.com/package/@tensorflow/tfjs-backend-webgpu
@@ -81,11 +85,15 @@ export class BasicPitch {
   public static async init(
     modelOrModelPath: string | Promise<tf.GraphModel>,
     tensorflowBackend: "webgl" | "wasm" | "cpu" | undefined = undefined,
+    wasmPath = "/",
   ) {
     if (tensorflowBackend) {
+      if (tensorflowBackend === 'wasm') {
+        setWasmPaths(wasmPath);
+      }
+
       await tf.setBackend(tensorflowBackend);
       await tf.ready();
-      console.log(`Tensorflow backend set to ${tf.getBackend()}`);
     }
 
     return new BasicPitch(modelOrModelPath);
