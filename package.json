@@ -1,6 +1,6 @@
 {
   "name": "@playground-sessions/basic-pitch",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A JS module that takes audio and converts it to MIDI with machine learning",
   "main": "cjs/index.js",
   "module": "esm/index.js",
