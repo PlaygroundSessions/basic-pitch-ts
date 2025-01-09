@@ -228,7 +228,12 @@ export class BasicPitch {
     let calculatedFrames = 0;
 
     for (let i = 0; i < reshapedInput.shape[0]; ++i) {
-      percentCallback(i / reshapedInput.shape[0]);
+      // For some reason, some UI doesn't update progress without this setTimeout. It's like the UI thread was blocked.
+      await new Promise(resolve => setTimeout(() => {
+        percentCallback(i / reshapedInput.shape[0]);
+        resolve(null)
+      }, 0));
+
       const [resultingFrames, resultingOnsets, resultingContours] =
         await this.evaluateSingleFrame(reshapedInput, i);
       let unwrappedResultingFrames = this.unwrapOutput(resultingFrames);
